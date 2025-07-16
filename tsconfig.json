@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // 告诉 ts 文件哪里找
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}

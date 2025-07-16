@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  border: none;
+}
+
+p {
+  display: block;
+  font-size: 0.8rem;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(to bottom right, pink, skyblue);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
