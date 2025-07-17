@@ -16,7 +16,7 @@ p {
 }
 
 body {
-  background: linear-gradient(to bottom right, pink, skyblue);
+  background: linear-gradient(to bottom right, white, pink);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
