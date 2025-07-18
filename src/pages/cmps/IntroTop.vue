@@ -26,12 +26,10 @@
 
 .box {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  height: 100%;
   img {
-    height: 90px;
-    // margin-left: -20px;
+    height: 70px;
   }
   .intro {
     margin-right: 5px;
@@ -46,8 +44,6 @@
       line-height: 12px;
       font-weight: bold;
     }
-    // text-align: center;
-    // margin-top: 100px;
   }
 }
 </style>

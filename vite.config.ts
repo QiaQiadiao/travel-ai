@@ -21,4 +21,8 @@ export default defineConfig({
       ],
     },
   },
+  server:{
+    host:"192.168.14.136",
+    port:666
+  }
 });
