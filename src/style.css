@@ -16,8 +16,15 @@ p {
 }
 
 body {
-  background: linear-gradient(to bottom right, #fff3f5, pink);
+  background: linear-gradient(to bottom right, #fee4e8, pink);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
+}
+.text-show{
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
