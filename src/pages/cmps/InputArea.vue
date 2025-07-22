@@ -1,17 +1,50 @@
 <template>
   <div class="input-box">
+    <div class="photo">
+      <!-- <van-uploader
+        v-model="fileList"
+        preview-size="60px"
+        max-count="1"
+        disabled
+      /> -->
+    </div>
     <div class="data-query">
-      <van-button type="default">默认按钮</van-button>
-      <van-button type="default">默认按钮</van-button>
-      <van-button type="default">默认按钮</van-button>
+      <van-button type="default" size="mini">查询火车票</van-button>
+      <van-button type="default" size="mini">查询天气</van-button>
+      <van-button type="default" size="small">一键投诉</van-button>
       <van-uploader>
-        <van-button type="primary">上传文件</van-button>
+        <van-button type="default" size="small">上传文件</van-button>
       </van-uploader>
+    </div>
+    <div class="background">
+      <div class="input">
+        <img src="../../assets/clear.png" alt="" />
+        <!-- <input type="text" class="input-content" placeholder="" /> -->
+        <div class="input-container">
+          <span
+            class="editable-span"
+            contenteditable="true"
+            data-placeholder="有问题，问小粤！"
+            role="textbox"
+            aria-multiline="true"
+            aria-label="输入框"
+          ></span>
+        </div>
+        <img class="send" src="../../assets/send.png" alt="" />
+      </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue';
+const fileList = ref([
+  { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+  // Uploader 根据文件后缀来判断是否为图片文件
+  // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
+  { url: 'https://cloud-image', isImage: true },
+]);
+</script>
 
 <style scoped lang="less">
 .input-box {
@@ -20,5 +53,95 @@
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: rgba(254, 206, 214, 0.8);
+  :deep(.van-uploader__wrapper--disabled) {
+    opacity: inherit;
+    .van-uploader__preview {
+      background-color: #fff;
+    }
+  }
+  .photo {
+    position: absolute;
+    top: -25px;
+    left: 6px;
+    .van-uploader__wrapper {
+      position: relative;
+      align-items: center;
+    }
+  }
+  .data-query {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    .van-button--default {
+      font-size: 5px;
+      height: 12px;
+      width: 30px;
+      border: none;
+      padding: 2px;
+      border-radius: 2px;
+      margin-left: 5px;
+    }
+    .van-button {
+      margin-bottom: 2px;
+      border: 0.5px solid #ccc;
+    }
+  }
+  .input {
+    display: flex;
+    align-items: center;
+    width: 95%;
+    margin: auto;
+    margin-bottom: 5px;
+    background-color: #fff1f4;
+    padding-bottom: 5px;
+    padding-top: 2px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    img {
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+    }
+    .send {
+      margin-left: 10px;
+    }
+    .input-content {
+      border: none;
+      height: 12px;
+      width: 110px;
+      background-color: #ececec;
+      padding: 1px;
+      padding-left: 3px;
+      border-radius: 3px;
+    }
+  }
+}
+.background {
+  background-color: transparent;
+}
+.input-container {
+  width: 110px;
+  margin: 2px 0;
+}
+
+.editable-span {
+  display: block;
+  max-height: 42px;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 7px;
+  line-height: 1.5;
+  overflow-y: auto;
+  background-color: #fff1f4;
+  word-wrap: break-word;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.editable-span:empty:before {
+  content: attr(data-placeholder);
+  color: #999;
+  font-style: italic;
 }
 </style>

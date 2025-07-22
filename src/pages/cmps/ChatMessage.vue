@@ -37,6 +37,7 @@ import GoodsRecom from '../toolCmps/GoodsRecom.vue';
 .dialog {
   width: 90%;
   margin: 5px auto;
+  margin-bottom: 75px;
   display: flex;
   flex-direction: column;
   .userMessage {
