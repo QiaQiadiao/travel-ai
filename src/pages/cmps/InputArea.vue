@@ -53,7 +53,9 @@ const fileList = ref([
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(254, 206, 214, 0.8);
+  // background-color: rgba(254, 206, 214, 0.8);
+  background-color: rgba(255, 239, 241, 0.8);
+
   :deep(.van-uploader__wrapper--disabled) {
     opacity: inherit;
     .van-uploader__preview {
