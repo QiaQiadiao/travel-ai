@@ -55,8 +55,15 @@
     </div>
     <div class="item">
       <p>最后，我们需要了解您的个人信息，用于核实事件以及告知您处理结果</p>
-      <div class="input-box">
-        <textarea name="" id="" placeholder="请输入您的诉求"></textarea>
+      <div class="personal-info">
+        <van-field v-model="value" label="姓名" placeholder="请输入名字" />
+        <van-field
+          v-model="value"
+          label="联系方式"
+          placeholder="请输入联系方式"
+          type="tel"
+        />
+        <van-button type="primary">提交投诉单</van-button>
       </div>
     </div>
   </div>
@@ -139,6 +146,12 @@ const onConfirm1 = ref();
         line-height: 1.5;
         font-size: 6px;
       }
+    }
+    .van-button {
+      display: block;
+      height: 25px;
+      width: 80%;
+      margin: 5px auto;
     }
     :deep(i) {
       font-size: 10px;
