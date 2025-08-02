@@ -5,7 +5,10 @@ import router from './router';
 import 'amfe-flexible'; // 动态改变根字体大小
 import { Image as VanImage,Button,Uploader,ConfigProvider,Field, CellGroup,NavBar, Picker, Popup,Form } from 'vant';
 import 'vant/lib/index.css';
+import { createPinia } from 'pinia'
+const pinia = createPinia()
 const app = createApp(App);
+app.use(pinia)
 app.use(router);
 app.use(VanImage);
 app.use(Button);

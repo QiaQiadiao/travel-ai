@@ -1,9 +1,9 @@
 <template>
   <div class="dialog">
     <div class="userMessage">
-      你的房间打扫了房间的撒风口浪尖的设计费杜绝方式垃圾开发时的加拉
+      你的房间打扫了房间的撒风口浪尖的设计费杜绝方式垃圾开发时的加拉32132131231
     </div>
-    <div class="sendImage">
+    <!-- <div class="sendImage">
       <van-image
         width="120px"
         height="120px"
@@ -11,18 +11,24 @@
         radius="5"
         src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
       />
-    </div>
+    </div> -->
     <div class="ai">
       <img src="../../assets/girl.png" alt="" />
       <div class="text">小粤</div>
     </div>
     <div class="aiMessage">
-      <loading></loading>
-      <!-- ai1221414324 大家萨弗克拉金克拉撒旦发的洒家分厘卡圣诞节付款了3 -->
+      <!-- <loading></loading> -->
+      <p>{{ msg }}</p>
     </div>
-    <TrainTicket></TrainTicket>
+    <template v-for="prompt in userContentStore.prompts" :key="prompt">
+      <div class="userMessage">
+        {{ prompt }}
+      </div>
+    </template>
+
+    <!-- <TrainTicket></TrainTicket>
     <Weather></Weather>
-    <GoodsRecom></GoodsRecom>
+    <GoodsRecom></GoodsRecom> -->
   </div>
 </template>
 
@@ -31,18 +37,46 @@ import Loading from './Loading.vue';
 import TrainTicket from '../toolCmps/TrainTicket.vue';
 import Weather from '../toolCmps/Weather.vue';
 import GoodsRecom from '../toolCmps/GoodsRecom.vue';
+import { nextTick, ref, watch, defineEmits } from 'vue';
+import { useUserContentStore } from '@/stores/index';
+const userContentStore = useUserContentStore();
+const msg = ref('1322');
+const emit = defineEmits(['dialogChange']);
+let inThrottle = true;
+watch(msg, async () => {
+  if (inThrottle) {
+    let timerThrottle = setTimeout(async () => {
+      await nextTick();
+      emit('dialogChange', true);
+      inThrottle = true;
+      clearTimeout(timerThrottle);
+    }, 100);
+  }
+  inThrottle = false;
+});
+// const timer = setInterval(() => {
+//   let newWords = '123';
+//   msg.value += newWords;
+// }, 100);
+// setTimeout(() => {
+//   clearInterval(timer);
+// }, 50000);
 </script>
 
 <style scoped lang="less">
 .dialog {
   width: 90%;
   margin: 5px auto;
-  margin-bottom: 75px;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: column;
+  // 自动跟随
+  // max-height: 300px; // 加一个最大高度限制
+  overflow-y: auto; // 让它可以滚动
   .userMessage {
     font-size: 6px;
     padding: 3px;
+    margin: 5px 0;
     max-width: 80%;
     background-color: #ffabc3;
     color: #1a1a19;
@@ -95,13 +129,22 @@ import GoodsRecom from '../toolCmps/GoodsRecom.vue';
   }
   .aiMessage {
     align-self: start;
-    max-width: 100%;
-    padding: 3px;
+    max-width: 95%;
+    padding: 4px;
+    // padding-top: 1px;
+    // padding-bottom: 5px;
     background-color: #fff1f4;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
     font-size: 6px;
+    // 换行
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    p {
+      font-size: 6px;
+    }
   }
 }
 </style>

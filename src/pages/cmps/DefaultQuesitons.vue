@@ -53,8 +53,10 @@
     background-color: white;
     border-radius: 5px;
     #head {
+      display: inline-block;
       font-size: 6px;
       margin-left: 5px;
+      margin-top: 3px;
     }
     .q {
       display: flex;

@@ -18,7 +18,7 @@
     </div>
     <div class="background">
       <div class="input">
-        <img src="../../assets/clear.png" alt="" />
+        <img src="../../assets/clear.png" alt="" @click="clearPrompt" />
         <!-- <input type="text" class="input-content" placeholder="" /> -->
         <div class="input-container">
           <span
@@ -28,22 +28,46 @@
             role="textbox"
             aria-multiline="true"
             aria-label="输入框"
+            ref="spanRef"
           ></span>
         </div>
-        <img class="send" src="../../assets/send.png" alt="" />
+        <img
+          class="send"
+          src="../../assets/send.png"
+          alt=""
+          @click="sendPrompt"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
+import { useUserContentStore } from '@/stores/index';
 const fileList = ref([
   { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
   // Uploader 根据文件后缀来判断是否为图片文件
   // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
   { url: 'https://cloud-image', isImage: true },
 ]);
+const emit = defineEmits(['sendPrompts']);
+const spanRef = ref();
+const userContentStore = useUserContentStore();
+function sendPrompt() {
+  console.log(spanRef.value.textContent);
+  // 发送请求
+  // 发送对话框
+  if (/\s/.test(spanRef.value.textContent)) {
+    const str = spanRef.value.textContent.trim();
+    userContentStore.add(str);
+    spanRef.value.textContent = '';
+    emit('sendPrompts', true);
+  }
+}
+function clearPrompt() {
+  spanRef.value.textContent = '';
+}
 </script>
 
 <style scoped lang="less">
@@ -93,7 +117,7 @@ const fileList = ref([
     display: flex;
     align-items: center;
     width: 95%;
-    margin: auto;
+    margin: 0 auto;
     margin-bottom: 5px;
     background-color: #fff1f4;
     padding-bottom: 5px;
@@ -106,7 +130,7 @@ const fileList = ref([
       margin: 0 5px;
     }
     .send {
-      margin-left: 10px;
+      width: 10px;
     }
     .input-content {
       border: none;
@@ -136,7 +160,8 @@ const fileList = ref([
   line-height: 1.5;
   overflow-y: auto;
   background-color: #fff1f4;
-  word-wrap: break-word;
+  // word-wrap: break-word; // 会出现bug 中英文不能一行显示
+  white-space: pre-wrap;
   outline: none;
   transition: border-color 0.2s;
 }
