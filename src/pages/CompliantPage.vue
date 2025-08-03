@@ -63,7 +63,9 @@
           placeholder="请输入联系方式"
           type="tel"
         />
-        <van-button type="primary">提交投诉单</van-button>
+        <van-button type="primary" @click="sendCompliants">
+          提交投诉单
+        </van-button>
       </div>
     </div>
   </div>
@@ -71,8 +73,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-
-const onClickLeft = () => {};
+import { useRouter } from 'vue-router';
+const router = useRouter(); // 添加路由器
+const onClickLeft = () => {
+  router.push('/'); // 跳回主页
+};
+const sendCompliants = () => {
+  router.push('/notice'); // 跳回主页
+};
 const objs = ref([
   { text: '导游', value: '001' },
   { text: '旅行社', value: '002' },

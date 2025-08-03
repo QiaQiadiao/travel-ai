@@ -12,6 +12,11 @@ const routes = [
     name: 'compliant',
     component: () => import('@/pages/CompliantPage.vue'),
   },
+  {
+    path:'/notice',
+    name:'notice',
+    component: () => import('@/pages/cmps/NoticePage.vue'),
+  }
 ];
 
 const router = createRouter({

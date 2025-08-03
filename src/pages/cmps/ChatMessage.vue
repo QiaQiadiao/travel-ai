@@ -71,8 +71,6 @@ watch(msg, async () => {
   display: flex;
   flex-direction: column;
   // 自动跟随
-  max-height: 300px; // 加一个最大高度限制
-  overflow-y: auto; // 让它可以滚动
   .userMessage {
     font-size: 6px;
     padding: 3px;

@@ -1,7 +1,7 @@
 <template>
   <div class="box" ref="boxRef" @scroll="onScroll">
     <IntroTop></IntroTop>
-    <DefaultQuesitons></DefaultQuesitons>
+    <DefaultQuesitons @send-dq="handleSendDQ"></DefaultQuesitons>
     <ChatMessage @dialog-change="handleMsgChange"></ChatMessage>
     <AutoScrollIcon
       v-if="!autoScroll"
@@ -58,6 +58,16 @@ const handleSendPrompts = async (IsPromptsExit) => {
       });
     }, 100);
   }
+};
+// 处理用户发送默认问题
+const handleSendDQ = async () => {
+  await nextTick();
+  requestAnimationFrame(() => {
+    //移动端处理动画方式
+    if (boxRef.value) {
+      boxRef.value.scrollTop = boxRef.value.scrollHeight; // 屏幕滑到底部
+    }
+  });
 };
 </script>
 

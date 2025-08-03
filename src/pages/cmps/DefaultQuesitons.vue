@@ -6,22 +6,13 @@
     </div>
     <div class="questions">
       <span id="head">你可以这样问我</span>
-      <div class="q">
-        <img src="../../assets/dialog.png" alt="" />
-        <span>广州有什么旅游景点</span>
-      </div>
-      <div class="q">
-        <img src="../../assets/dialog.png" alt="" />
-        <span>广州有什么旅游景点</span>
-      </div>
-      <div class="q">
-        <img src="../../assets/dialog.png" alt="" />
-        <span>广州有什么旅游景点</span>
-      </div>
-      <div class="q">
-        <img src="../../assets/dialog.png" alt="" />
-        <span>广州有什么旅游景点</span>
-      </div>
+
+      <template v-for="question in defaultQuestions" :key="question">
+        <div class="q" @click="handleAskDQ(question)">
+          <img src="../../assets/dialog.png" alt="" />
+          <span>{{ question }}</span>
+        </div>
+      </template>
     </div>
     <div class="btn">
       <img src="../../assets/change.png" alt="" />
@@ -30,7 +21,23 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, defineEmits } from 'vue';
+import { useUserContentStore } from '@/stores/index';
+
+const defaultQuestions = ref([
+  '广州有什么旅游景点',
+  '广州有什么好吃的',
+  '广州有什么好玩的',
+  '广州有什么好逛的',
+]);
+const emit = defineEmits(['send-dq']);
+const userContentStore = useUserContentStore();
+const handleAskDQ = (question) => {
+  userContentStore.add(question);
+  emit('send-dq');
+};
+</script>
 
 <style scoped lang="less">
 @font-face {

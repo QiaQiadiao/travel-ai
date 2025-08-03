@@ -11,7 +11,9 @@
     <div class="data-query">
       <van-button type="default" size="mini">查询火车票</van-button>
       <van-button type="default" size="mini">查询天气</van-button>
-      <van-button type="default" size="small">一键投诉</van-button>
+      <van-button type="default" size="small" @click="toCompliantPage">
+        一键投诉
+      </van-button>
       <van-uploader>
         <van-button type="default" size="small">上传文件</van-button>
       </van-uploader>
@@ -45,6 +47,8 @@
 <script setup lang="ts">
 import { ref, defineEmits } from 'vue';
 import { useUserContentStore } from '@/stores/index';
+import { useRouter } from 'vue-router';
+const router = useRouter(); // 添加路由器
 const fileList = ref([
   { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
   // Uploader 根据文件后缀来判断是否为图片文件
@@ -54,8 +58,8 @@ const fileList = ref([
 const emit = defineEmits(['sendPrompts']);
 const spanRef = ref();
 const userContentStore = useUserContentStore();
+// 发送用户问题
 function sendPrompt() {
-  console.log(spanRef.value.textContent);
   // 发送请求
   // 发送对话框
   if (spanRef.value.textContent !== '') {
@@ -65,8 +69,13 @@ function sendPrompt() {
     emit('sendPrompts', true);
   }
 }
+// 清理发送框
 function clearPrompt() {
   spanRef.value.textContent = '';
+}
+// 跳转投诉页面
+function toCompliantPage() {
+  router.push('/compliant'); //跳转页面
 }
 </script>
 
@@ -77,7 +86,6 @@ function clearPrompt() {
   bottom: 0;
   left: 0;
   right: 0;
-  // background-color: rgba(254, 206, 214, 0.8);
   background-color: rgba(255, 239, 241, 0.8);
 
   :deep(.van-uploader__wrapper--disabled) {
