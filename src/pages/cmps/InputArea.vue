@@ -58,7 +58,7 @@ function sendPrompt() {
   console.log(spanRef.value.textContent);
   // 发送请求
   // 发送对话框
-  if (/\s/.test(spanRef.value.textContent)) {
+  if (spanRef.value.textContent !== '') {
     const str = spanRef.value.textContent.trim();
     userContentStore.add(str);
     spanRef.value.textContent = '';

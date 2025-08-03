@@ -1,11 +1,23 @@
 <template>
-  <div class="box">
+  <div class="boxDQ">
     <div class="ai">
       <img src="../../assets/girl.png" alt="" />
       <div class="text">小粤</div>
     </div>
     <div class="questions">
       <span id="head">你可以这样问我</span>
+      <div class="q">
+        <img src="../../assets/dialog.png" alt="" />
+        <span>广州有什么旅游景点</span>
+      </div>
+      <div class="q">
+        <img src="../../assets/dialog.png" alt="" />
+        <span>广州有什么旅游景点</span>
+      </div>
+      <div class="q">
+        <img src="../../assets/dialog.png" alt="" />
+        <span>广州有什么旅游景点</span>
+      </div>
       <div class="q">
         <img src="../../assets/dialog.png" alt="" />
         <span>广州有什么旅游景点</span>
@@ -30,9 +42,10 @@
   font-style: normal;
   font-display: swap;
 }
-.box {
+.boxDQ {
   width: 80%;
   margin-top: 8px;
+  height: 140px;
   .ai {
     display: flex;
     align-items: center;

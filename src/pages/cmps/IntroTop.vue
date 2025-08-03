@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="boxTop">
     <img src="../../assets/bg-gz.png" alt="" />
     <!-- <img src="../../assets/bg-gz-2.png" alt=""> -->
     <div class="intro">
@@ -24,10 +24,11 @@
   font-display: swap;
 }
 
-.box {
+.boxTop {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 70px;
   img {
     height: 70px;
   }
