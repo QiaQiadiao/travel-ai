@@ -1,8 +1,5 @@
 <template>
   <div class="dialog">
-    <div class="userMessage">
-      你的房间打扫了房间的撒风口浪尖的设计费杜绝方式垃圾开发时的加拉32132131231
-    </div>
     <!-- <div class="sendImage">
       <van-image
         width="120px"
@@ -16,13 +13,14 @@
       <img src="../../assets/girl.png" alt="" />
       <div class="text">小粤</div>
     </div>
-    <div class="aiMessage">
-      <!-- <loading></loading> -->
-      <p>{{ msg }}</p>
-    </div>
-    <template v-for="prompt in userContentStore.prompts" :key="prompt">
+
+    <template v-for="(reply, prompt) in userContentStore.prompts" :key="prompt">
       <div class="userMessage">
         {{ prompt }}
+      </div>
+      <div class="aiMessage">
+        <loading v-if="!reply"></loading>
+        <p v-else>{{ reply }}</p>
       </div>
     </template>
 

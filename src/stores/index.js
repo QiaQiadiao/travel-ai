@@ -1,15 +1,25 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-
+import { reactive, ref } from 'vue'
+import { fetchAIReply } from '../apis'
 export const useUserContentStore = defineStore('user', () => {
-  const prompts = ref(['prompt1','prompt2','prompt3'])
-  function add(prompt) {
+  const prompts = reactive({
+    prompt1: null,
+    prompt2: '123123'
+  })
+    
+  async function getRes(prompt) {
     if(prompt) {
-        prompts.value.push(prompt)
+        prompts[prompt] = null
+        const res = await fetchAIReply(prompt)
+        // let ans = ''
+        // let timer = setInterval(() => {
+
+        //   ans += res.slice(pos,len)
+
+        // }, 50);
+        prompts[prompt] = res
     }
   }
-  function clearAll() {
-    prompts.value.length = 0
-  }
-  return { prompts, add, clearAll }
+
+  return { prompts, getRes}
 })

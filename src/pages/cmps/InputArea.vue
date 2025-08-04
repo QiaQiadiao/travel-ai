@@ -64,9 +64,9 @@ function sendPrompt() {
   // 发送对话框
   if (spanRef.value.textContent !== '') {
     const str = spanRef.value.textContent.trim();
-    userContentStore.add(str);
-    spanRef.value.textContent = '';
     emit('sendPrompts', true);
+    userContentStore.getRes(str);
+    spanRef.value.textContent = '';
   }
 }
 // 清理发送框
