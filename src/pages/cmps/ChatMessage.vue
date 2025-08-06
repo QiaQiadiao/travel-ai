@@ -14,16 +14,39 @@
       <div class="text">小粤</div>
     </div>
 
-    <template v-for="(reply, prompt) in userContentStore.prompts" :key="prompt">
-      <div class="userMessage">
-        {{ prompt }}
+    <!-- <template v-for="item in userContentStore.messages" :key="item.id">
+      <div v-if="item.role === 'user'" class="userMessage">
+        {{ item.content }}
       </div>
-      <div class="aiMessage">
-        <loading v-if="!reply"></loading>
-        <p v-else>{{ reply }}</p>
+      <div v-else-if="item.role === 'system'" class="aiMessage">
+        <p v-if="item.done">{{ item.content }}</p>
+        <p v-else>
+          {{ item.content }}{{ userContentStore.currentDelta }}
+          <loading v-if="!item.done" />
+        </p>
+      </div>
+    </template> -->
+
+    <template v-for="item in userContentStore.messages" :key="item.id">
+      <div v-if="item.role === 'user'" class="userMessage">
+        {{ item.content }}
+      </div>
+      <div v-else-if="item.role === 'system'" class="aiMessage">
+        <p v-if="item.done" v-html="mdToHtml(item.content)"></p>
+        <p v-else>
+          <span
+            v-html="mdToHtml(item.content + userContentStore.currentDelta)"
+          />
+          <loading v-if="!item.done" />
+        </p>
       </div>
     </template>
-
+    <!-- <div class="aiMessage">
+      <p>
+        123123
+        <loading />
+      </p>
+    </div> -->
     <!-- <TrainTicket></TrainTicket>
     <Weather></Weather>
     <GoodsRecom></GoodsRecom> -->
@@ -37,31 +60,38 @@ import Weather from '../toolCmps/Weather.vue';
 import GoodsRecom from '../toolCmps/GoodsRecom.vue';
 import { nextTick, ref, watch, defineEmits } from 'vue';
 import { useUserContentStore } from '@/stores/index';
+import { mdToHtml } from '@/apis';
 const userContentStore = useUserContentStore();
 const msg = ref('1322');
 const emit = defineEmits(['dialogChange']);
 let inThrottle = true;
-watch(msg, async () => {
-  if (inThrottle) {
-    let timerThrottle = setTimeout(async () => {
-      await nextTick();
-      emit('dialogChange', true);
-      inThrottle = true;
-      clearTimeout(timerThrottle);
-    }, 100);
-  }
-  inThrottle = false;
-});
+// 实时滚动，ai流式信息
+watch(
+  () => userContentStore.currentDelta,
+  async () => {
+    if (inThrottle) {
+      let timerThrottle = setTimeout(async () => {
+        await nextTick();
+        emit('dialogChange', true);
+        inThrottle = true;
+        clearTimeout(timerThrottle);
+      }, 100);
+    }
+    inThrottle = false;
+  },
+);
+
 // const timer = setInterval(() => {
 //   let newWords = '123';
 //   msg.value += newWords;
-// }, 100);
+// }, 100);user
 // setTimeout(() => {
 //   clearInterval(timer);
 // }, 50000);
 </script>
 
 <style scoped lang="less">
+// 引入md样式
 .dialog {
   width: 90%;
   margin: 5px auto;
@@ -125,6 +155,7 @@ watch(msg, async () => {
   }
   .aiMessage {
     align-self: start;
+    position: relative;
     max-width: 95%;
     padding: 4px;
     // padding-top: 1px;
@@ -140,6 +171,7 @@ watch(msg, async () => {
     overflow-wrap: break-word;
     p {
       font-size: 6px;
+      position: relative;
     }
   }
 }

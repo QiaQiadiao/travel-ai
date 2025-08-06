@@ -8,13 +8,16 @@
 
 <style scoped lang="less">
 .load-box {
-  display: flex;
-  justify-content: center;
-  width: 15px;
-  height: 15px;
+  display: inline-block;
+  // justify-content: center;
+  width: 10px;
+  height: 4px;
+  position: relative;
   img {
-    width: 15px;
-    height: 15px;
+    position: absolute;
+    top: -3px;
+    width: 10px;
+    height: 10px;
     animation: slap 1s linear infinite;
   }
 }

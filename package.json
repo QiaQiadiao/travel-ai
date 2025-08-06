@@ -13,9 +13,14 @@
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",
+    "dompurify": "^3.2.6",
     "husky": "^9.1.7",
+    "lodash-es": "^4.17.21",
+    "marked": "^16.1.2",
+    "openai": "^5.11.0",
     "pinia": "^3.0.3",
     "prettier": "^3.6.2",
+    "uuid": "^11.1.0",
     "vant": "^4.9.21",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
