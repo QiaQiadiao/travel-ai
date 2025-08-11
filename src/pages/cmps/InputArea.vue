@@ -62,6 +62,10 @@ const userContentStore = useUserContentStore();
 function sendPrompt() {
   // 发送请求
   // 发送对话框
+  if (userContentStore.streamingId !== null) {
+    console.log('跳过了');
+    return;
+  }
   if (spanRef.value.textContent !== '') {
     const str = spanRef.value.textContent.trim();
     emit('sendPrompts', true);

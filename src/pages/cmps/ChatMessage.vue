@@ -44,7 +44,7 @@
             v-if="data.type === 'query_train_tickets'"
             :queryData="data.content"
           ></TrainTicket>
-          <Weather v-else></Weather>
+          <Weather v-else :weatherData="data.content"></Weather>
         </template>
       </template>
     </template>
@@ -55,7 +55,7 @@
         <loading />
       </p>
     </div> -->
-
+    <!-- <Weather></Weather> -->
     <!-- <GoodsRecom></GoodsRecom> -->
   </div>
 </template>

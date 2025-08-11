@@ -7,7 +7,7 @@
     <div class="questions">
       <span id="head">你可以这样问我</span>
 
-      <template v-for="question in defaultQuestions" :key="question">
+      <template v-for="question in showQuestions" :key="question">
         <div class="q" @click="handleAskDQ(question)">
           <img src="../../assets/dialog.png" alt="" />
           <span>{{ question }}</span>
@@ -16,27 +16,70 @@
     </div>
     <div class="btn">
       <img src="../../assets/change.png" alt="" />
-      <span>换一批</span>
+      <span @click="change">换一批</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue';
+import { ref, defineEmits, computed, onMounted } from 'vue';
 import { useUserContentStore } from '@/stores/index';
 
 const defaultQuestions = ref([
+  /* 景点 */
   '广州有什么旅游景点',
   '广州有什么好吃的',
   '广州有什么好玩的',
   '广州有什么好逛的',
+  '广州一日游路线推荐',
+  '广州夜景哪里好看',
+  '广州亲子游去哪里',
+
+  /* 美食 */
+  '广州早茶必吃榜',
+  '广州特色小吃有哪些',
+  '广州最地道的烧腊店',
+
+  /* 购物/逛街 */
+  '广州逛街购物去哪里',
+  '广州潮牌买手店推荐',
+
+  /* 天气 */
+  '广州今天天气怎么样',
+  '广州明天会下雨吗',
+  '广州本周天气预报',
+  '广州现在温度多少',
+
+  /* 火车 */
+  '广州到深圳今天火车票',
+  '广州到北京高铁时刻表',
+  '广州南站到长沙最早班次',
+  '广州到珠海城轨票查询',
 ]);
 const emit = defineEmits(['send-dq']);
 const userContentStore = useUserContentStore();
 const handleAskDQ = (question) => {
-  userContentStore.add(question);
+  userContentStore.getRes(question);
   emit('send-dq');
 };
+// 打乱函数
+const shuffle = (arr) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+const showQuestions = computed(() => {
+  return shuffle([...defaultQuestions.value]).slice(0, 4);
+});
+const change = () => {
+  const item = defaultQuestions.value.shift();
+  defaultQuestions.value.push(item);
+};
+onMounted(() => {
+  change();
+});
 </script>
 
 <style scoped lang="less">
