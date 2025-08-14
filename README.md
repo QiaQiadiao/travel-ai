@@ -18,7 +18,7 @@
 
 | 层级        | 技术                                       |
 | --------- | ---------------------------------------- |
-| **前端**    | TypeScript + Vue3 + Pinia + Vant + Fetch |
+| **前端**    | Vue3 + Pinia + Vant + Fetch |
 | **后端**    | Node.js + Koa2                           |
 | **AI 引擎** | DeepSeek API + 通义千问 API                  |
 
