@@ -1,13 +1,13 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 // ai对话接口
-export async function postAIReply(messages,onChunk,onData) {
+export async function postAIReply(messages,model,onChunk,onData,onError) {
   const response = await fetch('http://192.168.31.33:7000/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ messages })
+    body: JSON.stringify({ messages, model })
   })
   if (!response.ok) {
     console.error('请求失败');
@@ -34,9 +34,11 @@ export async function postAIReply(messages,onChunk,onData) {
         const { type, payload } = JSON.parse(ln);
         if (type === 'data') onData(payload);   // 数据信息
         if (type === 'text') onChunk(payload);   // 逐字文字
-      } catch { 
+        if (type === 'error') onError(payload); // 服务端错误
+      } catch(e) { 
         /* 忽略解析失败的片段 */ 
-        console.log('流数据解析失败')
+        console.log('流数据解析失败:')
+        console.log(e)
         throw new Error('流数据解析失败')
       }
 

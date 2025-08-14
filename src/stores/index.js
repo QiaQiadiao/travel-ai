@@ -5,15 +5,18 @@
 
   export const useUserContentStore = defineStore('user', () => {
     const messages = ref([
-      { id: uuidv4(), role: 'system', content: '你是小粤，一个广州旅行助手，只能够以简洁、高效的方式解答用户关于广州的问题，也可以查询中国大陆内天气和火车票，其他无关问题一概不予回答。另外，只关注当前问题，忽略无关的历史对话,不能重复已经回答过的问题。', done: true },
+      {  role: 'system', content: '你是小粤，一个广州旅行助手，只能够以简洁、高效的方式解答用户关于广州的问题，也可以查询中国大陆内天气和火车票，其他无关问题一概不予回答。另外，只关注当前问题，忽略无关的历史对话,不能重复已经回答过的问题。', done: true },
     ])
     const queryData = ref([
-      // { id: uuidv4(), type: 'weather', content: '...'},
-      // { id: uuidv4(), type: 'train', content: '...'}
+      // { id: uuidv4(), type: 'get_weather', content: '...'},
+      // { id: uuidv4(), type: 'query_train_tickets', content: '...'}
+      // { id: uuidv4(), type: 'error', content: '...'}
     ])
     const currentDelta = ref('') // 当前加载的文本信息
     const streamingId = ref(null) // 当前信息流的id
-
+    const model = ref('qwen-plus') // 模型
+    const pendingChunk = ref('')      // 缓存区：等待这一次 rAF 写入的内容
+    let rafId = null   // 记录 requestAnimationFrame id，方便取消
     async function getRes(content) {
       if(content) {
         // 1. 先添加空壳 ai 消息 和 用户消息
@@ -26,28 +29,27 @@
 
         // 2. 调用接口，请求后端
         const onChunkFn = (chunk) => {
-          currentDelta.value += chunk
+          pendingChunk.value += chunk     // 1. 先把 chunk 放进缓存区
+
+          if (rafId !== null) return      // 2. 如果已经预定了一帧，直接退出
+
+          rafId = requestAnimationFrame(() => {
+            currentDelta.value += pendingChunk.value // 3. 在下一帧一次性写入
+            pendingChunk.value = ''       // 4. 清空缓存区
+            rafId = null                  // 5. 重置标记，允许下一批 chunk 再次预定
+          })
         }
 
         const onDataFn = (data) => {      
           const d = data[data.length-1]  
           queryData.value.push({id: streamingId.value, type: d.type, content: d.content}) 
-          console.log(queryData.value)
         }
 
-        // let tempMsgs = messages.value.map(({id, role, content})=>({id, role, content}))
-        // tempMsgs.splice(tempMsgs.length-1,1)
-        // tempMsgs[tempMsgs.length-1].content += '（不要重复回答已经回答过的问题！只需要回答这个问题！）' // 哈哈哈哈，我真是个机灵鬼！   
-        
-        // const queryDataIds = queryData.value.map(item=> item.id)
-        // // tempMsgs = tempMsgs.filter((item)=>!queryDataIds.includes(item.id)).map(({role, content})=>({role, content}))
-        // for(let i=0; i<tempMsgs.length; i++) {
-        //   if(queryDataIds.includes(tempMsgs[i].id)) {
-        //     tempMsgs.splice(i-1,2)
-        //   }
-        // }
-        // tempMsgs = tempMsgs.map(({ role, content})=>({ role, content}))
-        // console.log(tempMsgs)
+        const onErrorFn = (data) => {
+          currentDelta.value = data
+          queryData.value.push({id: streamingId.value, type: 'error', content: data}) 
+        }
+
         let tempMsgs = messages.value.map(({ id, role, content }) => ({ id, role, content }));
 
         // 1. 去掉最后一条
@@ -74,11 +76,9 @@
 
         // 5. 去掉 id
         tempMsgs = tempMsgs.map(({ role, content }) => ({ role, content }));
-
-        console.log(tempMsgs);
         
-        await postAIReply(tempMsgs, onChunkFn, onDataFn)
-
+        await postAIReply(tempMsgs, model.value, onChunkFn, onDataFn, onErrorFn)
+        
         // 3. 整合完整消息
         const targetId = messages.value.findIndex((item)=>item.id === streamingId.value)
         if(targetId !== -1) {
@@ -87,10 +87,15 @@
           target.done = true
           currentDelta.value = ''
           streamingId.value = null
-          console.log(messages.value)
         }
+        // console.log('查询列表:')
+        // console.log(queryData.value);
+        
+        // console.log('消息列表：');
+        // console.log(messages.value);
+        
       }
     }
 
-    return { messages, queryData, currentDelta, getRes, streamingId }
+    return { messages, queryData, currentDelta, getRes, streamingId, model }
   })

@@ -23,10 +23,6 @@ import { computed } from 'vue';
 const props = defineProps(['weatherData']);
 const processWeatherData = computed(() => {
   return props.weatherData.map((item) => {
-    // let wea2 = item.wea2
-    // if(item.wea1 === item.wea2) {
-    //   wea2 = ''
-    // }
     return {
       ...item,
     };

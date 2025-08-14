@@ -24,27 +24,32 @@
     </template> -->
 
     <template v-for="item in userContentStore.messages" :key="item.id">
-      <div v-if="item.role === 'user'" class="userMessage">
-        {{ item.content }}
-      </div>
-      <div class="ai" v-if="item.role === 'system'">
-        <img src="../../assets/girl.png" alt="" />
-        <div class="text">小粤</div>
-      </div>
-      <div v-if="item.role === 'system'" class="aiMessage">
-        <p v-if="item.done" v-html="mdToHtml(item.content)"></p>
-        <p v-else>
-          {{ item.content }}{{ userContentStore.currentDelta }}
-          <loading v-if="!item.done" />
-        </p>
-      </div>
-      <template v-for="data in userContentStore.queryData" :key="data.id">
-        <template v-if="data.id === item.id">
-          <TrainTicket
-            v-if="data.type === 'query_train_tickets'"
-            :queryData="data.content"
-          ></TrainTicket>
-          <Weather v-else :weatherData="data.content"></Weather>
+      <template v-if="item.id">
+        <div v-if="item.role === 'user'" class="userMessage">
+          {{ item.content }}
+        </div>
+        <div class="ai" v-if="item.role === 'system' && item.id !== 110">
+          <img src="../../assets/girl.png" alt="" />
+          <div class="text">小粤</div>
+        </div>
+        <div v-if="item.role === 'system'" class="aiMessage">
+          <p v-if="item.done" v-html="mdToHtml(item.content)"></p>
+          <p v-else>
+            {{ item.content }}{{ userContentStore.currentDelta }}
+            <loading v-if="!item.done" />
+          </p>
+        </div>
+        <template v-for="data in userContentStore.queryData" :key="data.id">
+          <template v-if="data.id === item.id">
+            <TrainTicket
+              v-if="data.type === 'query_train_tickets'"
+              :queryData="data.content"
+            ></TrainTicket>
+            <Weather
+              v-else-if="data.type === 'get_weather'"
+              :weatherData="data.content"
+            ></Weather>
+          </template>
         </template>
       </template>
     </template>
@@ -86,13 +91,6 @@ watch(
     inThrottle = false;
   },
 );
-// const timer = setInterval(() => {
-//   let newWords = '123';
-//   msg.value += newWords;
-// }, 100);user
-// setTimeout(() => {
-//   clearInterval(timer);
-// }, 50000);
 </script>
 
 <style scoped lang="less">

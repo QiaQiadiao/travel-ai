@@ -20,7 +20,7 @@ import InputArea from './cmps/InputArea.vue';
 import { nextTick, ref } from 'vue';
 // 自动跟随文本增加
 const boxRef = ref();
-const autoScroll = ref(false);
+const autoScroll = ref(true);
 function handleMsgChange(isChange) {
   if (isChange && autoScroll.value) {
     // boxRef.value.scrollTop = boxRef.value.scrollHeight;

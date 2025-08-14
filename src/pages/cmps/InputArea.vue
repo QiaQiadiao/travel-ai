@@ -9,14 +9,33 @@
       /> -->
     </div>
     <div class="data-query">
-      <van-button type="default" size="mini">查询火车票</van-button>
-      <van-button type="default" size="mini">查询天气</van-button>
+      <van-button type="default" size="mini" @click="queryTrianTickets">
+        查询火车票
+      </van-button>
+      <van-button type="default" size="mini" @click="getWeather">
+        查询天气
+      </van-button>
       <van-button type="default" size="small" @click="toCompliantPage">
         一键投诉
       </van-button>
-      <van-uploader>
-        <van-button type="default" size="small">上传文件</van-button>
-      </van-uploader>
+      <div class="model">
+        <van-button
+          type="default"
+          size="small"
+          @click="selectQwen"
+          :color="color1"
+        >
+          通义千问
+        </van-button>
+        <van-button
+          type="default"
+          size="small"
+          @click="selectDS"
+          :color="color2"
+        >
+          Deepseek
+        </van-button>
+      </div>
     </div>
     <div class="background">
       <div class="input">
@@ -49,15 +68,11 @@ import { ref, defineEmits } from 'vue';
 import { useUserContentStore } from '@/stores/index';
 import { useRouter } from 'vue-router';
 const router = useRouter(); // 添加路由器
-const fileList = ref([
-  { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-  // Uploader 根据文件后缀来判断是否为图片文件
-  // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-  { url: 'https://cloud-image', isImage: true },
-]);
 const emit = defineEmits(['sendPrompts']);
 const spanRef = ref();
 const userContentStore = useUserContentStore();
+const color1 = ref('linear-gradient(to right, #ff6034, #ee0a24)'); // model按钮颜色
+const color2 = ref(null);
 // 发送用户问题
 function sendPrompt() {
   // 发送请求
@@ -80,6 +95,26 @@ function clearPrompt() {
 // 跳转投诉页面
 function toCompliantPage() {
   router.push('/compliant'); //跳转页面
+}
+function getWeather() {
+  emit('sendPrompts', true);
+  userContentStore.getRes('广州最近天气怎么样');
+}
+function queryTrianTickets() {
+  emit('sendPrompts', true);
+  userContentStore.getRes('我想要查询火车票');
+}
+function selectQwen() {
+  if (color1.value) return;
+  color1.value = 'linear-gradient(to right, #ff6034, #ee0a24)';
+  color2.value = null;
+  userContentStore.model = 'qwen-plus';
+}
+function selectDS() {
+  if (color2.value) return;
+  color2.value = 'linear-gradient(to right, #ff6034, #ee0a24)';
+  color1.value = null;
+  userContentStore.model = 'deepseek-chat';
 }
 </script>
 
@@ -111,6 +146,13 @@ function toCompliantPage() {
     display: flex;
     align-items: center;
     margin-top: 2px;
+    .model {
+      display: flex;
+      // width: 60px;
+      // justify-content: center;
+      // align-items: center;
+      // flex: 2;
+    }
     .van-button--default {
       font-size: 5px;
       height: 12px;
@@ -118,7 +160,7 @@ function toCompliantPage() {
       border: none;
       padding: 2px;
       border-radius: 2px;
-      margin-left: 5px;
+      margin-left: 2px;
     }
     .van-button {
       margin-bottom: 2px;
