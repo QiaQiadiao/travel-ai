@@ -21,13 +21,24 @@ import { nextTick, ref } from 'vue';
 // 自动跟随文本增加
 const boxRef = ref();
 const autoScroll = ref(true);
+const enable = ref(true); // raf 节流判断标识
+
 function handleMsgChange(isChange) {
-  if (isChange && autoScroll.value) {
-    // boxRef.value.scrollTop = boxRef.value.scrollHeight;
-    boxRef.value.scrollTo({
-      top: boxRef.value.scrollHeight, // 显示页面的顶部划到
-      behavior: 'smooth', // ✨ 丝滑滚动
-    });
+  const scrollToBottom = () => {
+    if (isChange && autoScroll.value) {
+      // boxRef.value.scrollTop = boxRef.value.scrollHeight;
+      boxRef.value.scrollTo({
+        top: boxRef.value.scrollHeight, // 显示页面的顶部划到
+        behavior: 'smooth', // ✨ 丝滑滚动
+      });
+    }
+  };
+  if (enable.value) {
+    enable.value = false;
+    requestAnimationFrame(scrollToBottom);
+    setTimeout(() => {
+      enable.value = true;
+    }, 50);
   }
 }
 function handleAutoScroll() {
@@ -35,13 +46,23 @@ function handleAutoScroll() {
   handleMsgChange(true);
 }
 function onScroll() {
-  const el = boxRef.value;
+  const checkIfShowIcon = () => {
+    const el = boxRef.value;
 
-  if (!el) return;
+    if (!el) return;
 
-  const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-  if (distanceToBottom > 50) autoScroll.value = false;
-  else autoScroll.value = true;
+    const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    if (distanceToBottom > 50) autoScroll.value = false;
+    else autoScroll.value = true;
+  };
+
+  if (enable.value) {
+    enable.value = false;
+    requestAnimationFrame(checkIfShowIcon);
+    setTimeout(() => {
+      enable.value = true;
+    }, 50); // raf非常频繁，需用setTimeout来节流才有意义
+  }
 }
 // 处理用户发送内容
 const handleSendPrompts = async (IsPromptsExit) => {

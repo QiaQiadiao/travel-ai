@@ -47,7 +47,12 @@ export async function postAIReply(messages,model,onChunk,onData,onError) {
   }
 
 }
-// MD 渲染函数
+
+/**
+ * MD 渲染函数
+ * @param {*} md markdown格式文本
+ * @returns 
+ */
 export const mdToHtml = (md) =>
   DOMPurify.sanitize(marked.parseInline(md));
 

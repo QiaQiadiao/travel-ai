@@ -69,7 +69,6 @@
 import Loading from './Loading.vue';
 import TrainTicket from '../toolCmps/TrainTicket.vue';
 import Weather from '../toolCmps/Weather.vue';
-import GoodsRecom from '../toolCmps/GoodsRecom.vue';
 import { nextTick, ref, watch, defineEmits, onMounted } from 'vue';
 import { useUserContentStore } from '@/stores/index';
 import { mdToHtml } from '@/apis';
